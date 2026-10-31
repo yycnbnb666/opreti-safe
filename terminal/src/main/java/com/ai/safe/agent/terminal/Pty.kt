@@ -14,7 +14,8 @@ open class Pty(
     val masterFd: FileDescriptor?,
     private val ptyMaster: Int,
     val stdout: InputStream,
-    val stdin: OutputStream
+    val stdin: OutputStream,
+    val pid: Int = -1
 ) {
     // 为本地终端提供的便利构造函数
     constructor(process: Process, masterFd: FileDescriptor, ptyMaster: Int) : this(
@@ -112,7 +113,7 @@ open class Pty(
                 }
             }
             
-            return Pty(dummyProcess, fileDescriptor, masterFdInt)
+            return Pty(dummyProcess, fileDescriptor, masterFdInt, pid)
         }
 
         private external fun createSubprocess(cmdArray: Array<String>, envArray: Array<String>, workingDir: String): IntArray
