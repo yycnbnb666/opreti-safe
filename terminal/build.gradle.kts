@@ -16,7 +16,7 @@ val usePrebuiltNativeLibs =
     providers.gradleProperty("operit.prebuiltNativeLibs").orNull == "true"
 
 android {
-    namespace = "com.ai.assistance.operit.terminal"
+    namespace = "com.ai.safe.agent.terminal"
     compileSdk = 36
 
     defaultConfig {
