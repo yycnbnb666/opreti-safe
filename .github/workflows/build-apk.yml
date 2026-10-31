@@ -42,10 +42,8 @@ jobs:
           yes | sdkmanager --licenses > /dev/null || true
           sdkmanager --install "platform-tools" "platforms;android-36" "platforms;android-34" "build-tools;36.0.0"
 
-      - name: Use HuggingFace mirror for STT assets
-        run: |
-          sed -i 's#https://huggingface.co#https://hf-mirror.com#g' app/config/stt-model-assets.properties
-          grep -c hf-mirror app/config/stt-model-assets.properties || true
+      - name: Prefetch STT model assets
+        run: bash ci/fetch_stt_assets.sh
 
       - name: Configure SDK path
         run: echo "sdk.dir=$ANDROID_HOME" > local.properties
