@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<voice-interaction-service
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:sessionService="com.ai.safe.agent.services.assistant.OperitVoiceInteractionSessionService"
+    android:supportsAssist="true"
+    android:supportsLaunchVoiceAssistFromKeyguard="true"
+    android:supportsLocalInteraction="true"
+    android:settingsActivity="com.ai.safe.agent.ui.main.MainActivity"
+    android:recognitionService="com.ai.safe.agent.services.assistant.OperitVoiceInteractionService" />
+

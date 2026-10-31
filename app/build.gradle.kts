@@ -27,6 +27,12 @@ if (localPropertiesFile.exists()) {
     localProperties.load(FileInputStream(localPropertiesFile))
 }
 
+// 复用预编译原生库开关（仅用于无 NDK 的 ARM64 本机构建）：
+// 打开后 Gradle 不再执行 CMake，本模块直接打包 src/main/jniLibs 下的既有 .so。
+// 该开关不改变 CI 的默认行为（默认关闭，仍然完整编译原生代码）。
+val usePrebuiltNativeLibs =
+    providers.gradleProperty("operit.prebuiltNativeLibs").orNull == "true"
+
 data class SttModelAsset(
     val targetPath: String,
     val sourceUrl: String,
@@ -359,6 +365,7 @@ val syncMainAssets by tasks.registering(Sync::class) {
 android {
     namespace = "com.ai.safe.agent"
     compileSdk = 36
+    buildToolsVersion = "36.0.0"
 
     sourceSets {
         getByName("main") {
@@ -387,9 +394,11 @@ android {
         }
     }
 
-    externalNativeBuild {
-        cmake {
-            path = file("src/main/cpp/CMakeLists.txt")
+    if (!usePrebuiltNativeLibs) {
+        externalNativeBuild {
+            cmake {
+                path = file("src/main/cpp/CMakeLists.txt")
+            }
         }
     }
 
@@ -410,9 +419,11 @@ android {
             abiFilters.addAll(listOf("arm64-v8a"))
         }
 
-        externalNativeBuild {
-            cmake {
-                cppFlags("-std=c++17")
+        if (!usePrebuiltNativeLibs) {
+            externalNativeBuild {
+                cmake {
+                    cppFlags("-std=c++17")
+                }
             }
         }
 
